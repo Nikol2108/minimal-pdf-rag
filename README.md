@@ -127,7 +127,7 @@ I built this project using LangChain, OpenAI embeddings (text-embedding-3-small)
 I chose FAISS as the local vector store because it is lightweight, fast, and simple to use for similarity search in small RAG applications.
 It allows storing embeddings locally without needing an external database setup, which made it a good fit for the limited time scope of the assignment.
 I used OpenAI embeddings for semantic similarity search and gpt-4o-mini as the LLM because it provides good performance while keeping the implementation simple and cost-effective.
-Since the assignment was limited to 90 minutes, I focused on building a clean and readable end-to-end RAG pipeline for a single PDF document. I tried to keep the code modular and easy to follow by separating each stage of the process into dedicated functions.
+Since the assignment was limited to 90 minutes, I focused on building a clean and readable end-to-end RAG pipeline for a single PDF document. I kept the code modular and easy to follow by separating each stage of the process into dedicated functions.
 One limitation of the current approach is that retrieval quality depends mostly on chunking and similarity search. The system also works with a single PDF and does not include reranking, metadata filtering, or conversation memory.
 With more time, I would improve retrieval quality using reranking or hybrid search, support multiple PDFs with dynamic vector stores, and add stronger error handling and evaluation logic.
 
