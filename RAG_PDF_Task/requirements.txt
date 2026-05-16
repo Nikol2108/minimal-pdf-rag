@@ -1,0 +1,9 @@
+python-dotenv
+langchain
+langchain-community
+langchain-openai
+langchain-text-splitters
+pypdf
+faiss-cpu
+openai
+tiktoken
