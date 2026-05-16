@@ -30,14 +30,14 @@ def split_text_into_chunks(documents):
     return splitter.split_documents(documents)
 
 
-def create_embeddings_and_save_to_vector_store(chunks):
+def build_vector_store(chunks):
     embeddings = OpenAIEmbeddings(model=EMBEDDING_MODEL)
     vector_store = FAISS.from_documents(chunks, embeddings)
     vector_store.save_local(INDEX_PATH)
     return vector_store
 
 
-def load_or_build_vector_store(pdf_path: str):
+def get_vector_store(pdf_path: str):
     embeddings = OpenAIEmbeddings(model=EMBEDDING_MODEL)
 
     if os.path.exists(INDEX_PATH):
@@ -49,10 +49,10 @@ def load_or_build_vector_store(pdf_path: str):
 
     documents = load_pdf(pdf_path)
     chunks = split_text_into_chunks(documents)
-    return create_embeddings_and_save_to_vector_store(chunks)
+    return build_vector_store(chunks)
 
 
-def user_question_get_relevant_chunks(vector_store, question: str, k: int = TOP_K):
+def retrieve_relevant_chunks(vector_store, question: str, k: int = TOP_K):
     return vector_store.similarity_search(question, k=k)
 
 
@@ -80,7 +80,7 @@ Answer:"""
     return response.content.strip()
 
 
-def return_answer_alongside_sources(answer: str, source_chunks):
+def print_answer_with_sources(answer: str, source_chunks):
     print("\nAnswer:\n")
     print(answer)
     print("\nSource Chunks:\n")
@@ -111,7 +111,7 @@ def main():
 
     validate_environment(args.pdf)
 
-    vector_store = load_or_build_vector_store(args.pdf)
+    vector_store = get_vector_store(args.pdf)
 
     print("\nPDF RAG Assistant is ready.")
     print("Type your question and press Enter.")
@@ -127,9 +127,9 @@ def main():
         if not question:
             continue
 
-        source_chunks = user_question_get_relevant_chunks(vector_store, question)
+        source_chunks = retrieve_relevant_chunks(vector_store, question)
         answer = answer_question_with_context(question, source_chunks)
-        return_answer_alongside_sources(answer, source_chunks)
+        print_answer_with_sources(answer, source_chunks)
 
 
 
